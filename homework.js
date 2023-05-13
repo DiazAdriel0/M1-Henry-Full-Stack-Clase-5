@@ -10,9 +10,244 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   search(isEven), donde isEven es una función que retorna true cuando recibe por parámetro un número par, busca un nodo cuyo valor sea un número par.
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
-function LinkedList() {}
+/* class Node{
+  constructor(value){
+    this.value = value;
+    this.next = null;
+}
 
-function Node(value) {}
+class LinkedList{
+  constructor(){
+    this.head = null;
+    this._length = 0;
+  }
+  add(value){
+    const nodo = new Node(value);
+    let current = this.head;
+    if(!current){
+      this.head = nodo //Si current es null, head va a ser este nodo que estoy agregando
+    }else{
+      while(current.next){ //mientras current.next tenga algo
+        current = current.next; //pararme en el siguiente nodo
+      } //Cuando se encuentra con el ultimo
+      current.next = nodo; //le agrega el nuevo
+    }
+    this._length++
+    return nodo;
+  }
+  remove(){
+    let current = this.head;
+    if(!current){
+      return current;
+    }
+    else{
+      let prev = current;
+      while(current.next){
+        prev = current
+        current = current.next;
+      }
+      console.log(prev)
+      console.log(current)
+      prev.next = null
+      this._length--
+      return current;
+    }
+  }
+  search(valor){
+    let current = this.head;
+    let check = false;
+    if(current.value == valor){
+      check = true
+    }
+    while(!check && current.value != valor){
+      current = current.next;
+      if(current.value == valor){
+        check = true;
+      }
+    }
+  /*if(check){
+    return current;
+    } 
+  }
+}  */
+
+function Node(value){
+  this.value = value;
+  this.next = null;
+}
+
+function LinkedList(){
+  this.head = null;
+  this._length = 0;
+}
+
+LinkedList.prototype.add = function(value){
+  const nodo = new Node(value);
+  let current = this.head;
+  if(!current){
+    this.head = nodo //Si current es null, head va a ser este nodo que estoy agregando
+  }else{
+    while(current.next){ //mientras current.next tenga algo
+      current = current.next; //pararme en el siguiente nodo
+    } //Cuando se encuentra con el ultimo
+    current.next = nodo; //le agrega el nuevo
+  }
+  this._length++
+  return nodo;
+}
+
+LinkedList.prototype.remove = function(){
+  let current = this.head;
+  if(!current){
+    return null; //null
+  }else if(current.next == null){//Si head es el unico nodo
+    this._length--
+    this.head = null
+    return current.value;
+  }else{
+    let prev = current;
+    while(current.next){ //mientras no esté parado en el último elemento
+      prev = current //Me dejo guardado el elemento en el que estaba parado antes de la ultima ejecucion (el anteultimo nodo)
+      current = current.next; //Me paro en el siguiente elemento
+    }
+    //console.log(prev)
+    //console.log(current)
+    prev.next = null //Borro lo que está en la propiedad next del anteultimo nodo (el ultimo nodo)
+    //console.log(prev)
+    this._length--
+    return current.value; //.value es porque espera que le retorne el valor y no el nodo
+  }
+}
+
+/* LinkedList.prototype.search = function(param){
+// /* if(param){ //cb evaluada en el valor del nodo
+//   return param;
+//  }
+  if(this._length == 0){
+    return null
+  }
+  let current = this.head;
+  let check = false;
+  if(current.value == param){
+    check = true
+  }
+  while(!check && current.next != null){
+    current = current.next;
+    if(current.value == param){
+      check = true;
+    }
+  }
+  if(check){
+    return current.value;
+  }else{
+    if(param){ //cb evaluada en el valor del nodo
+      return param;
+    }
+    return null;
+  }
+} */
+
+LinkedList.prototype.search = function(param){
+  if(this._length == 0){//Lista vacía
+    return null;
+  }
+  if(typeof param === 'string'){
+    let current = this.head;
+    let find = false;
+    if(current.value === param){
+      return param;
+    }else{
+      while(!find && current.next !== null){
+        current = current.next;
+        if(current.value === param){
+          find = true
+        }
+      }
+      if(find){
+        return param;
+      }else{
+        return null
+      }
+    }
+  }else if(typeof param === 'function'){
+    let current = this.head;
+    let find = false
+    if(param(current.value)){
+      return current.value
+    }else{
+      while(!find && current.next !== null){
+        current = current.next;
+        if(param(current.value)){
+          find = true;
+        }
+      }
+      if(find){
+        return current.value;
+      }else{
+        return null
+      }
+    }
+  }else{
+    return null
+  }
+  /* let current = this.head;
+  let check = false;
+  let checkFun = false;
+  if(current.value === param){//Primer nodo es el buscado se retorna el valor de ese nodo
+    return current.value;
+  }
+  while(!check && current.next != null){//Recorrido de la lista hasta que encuentre el valor o la ejecucion de la callback de === true o no haya mas nodos en la lista
+    current = current.next
+    if(param === true){
+      checkFun = true;
+    }
+    if(current.value == param){
+      check = true;
+    }
+  }
+  if(check || checkFun){
+    return current.value;
+  }else{
+  return null;
+  } */
+}
+
+/*  let lista = new LinkedList()
+console.log(lista);
+lista.add("Gary")
+console.log(lista);
+lista.add("Barto")
+console.log(lista);
+lista.add("Mila") 
+console.log(lista);
+lista.add("Otro") 
+console.log(lista); */
+
+
+/* console.log("Metodo remove")
+console.log(lista.remove());
+console.log(lista);
+console.log(lista.remove());
+console.log(lista);
+console.log(lista.remove());
+console.log(lista);
+console.log(lista.remove());
+console.log(lista);
+console.log(lista.remove());
+console.log(lista); */
+
+/* function fun (param){
+  return true;
+}
+console.log("Metodo search")
+console.log(lista.search("Gary"));
+console.log(lista.search("Barto"));
+console.log(lista.search("Otro"))
+console.log(lista.search(fun())); */
+
+//function LinkedList() {}
+
+//function Node(value) {}
 
 /* EJERCICIO 2
 Implementar la clase HashTable.
