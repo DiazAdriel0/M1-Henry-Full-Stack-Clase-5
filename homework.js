@@ -82,100 +82,67 @@ function LinkedList(){
 }
 
 LinkedList.prototype.add = function(value){
-  const nodo = new Node(value);
-  let current = this.head;
+  const nodo = new Node(value); //Creo una instancia de la clase Node que toma el parametro que recibe el metodo add y lo asigna como Node.value
+  let current = this.head; //Me paro en el primer nodo
   if(!current){
-    this.head = nodo //Si current es null, head va a ser este nodo que estoy agregando
+    this.head = nodo //Si el primer nodo es null, head va a ser este nodo que estoy agregando (el primero)
   }else{
-    while(current.next){ //mientras current.next tenga algo
-      current = current.next; //pararme en el siguiente nodo
+    while(current.next){ //mientras current.next valga algo distinto de null. O sea mientras current no sea el último nodo de la lista
+      current = current.next; //Me paro en el siguiente nodo
     } //Cuando se encuentra con el ultimo
-    current.next = nodo; //le agrega el nuevo
+    current.next = nodo; //Agrego el nuevo nodo al final de la lista
   }
-  this._length++
-  return nodo;
+  this._length++ //Siempre que se ejecuta la función sumo uno a la propiedad de longitud
 }
 
 LinkedList.prototype.remove = function(){
-  let current = this.head;
-  if(!current){
-    return null; //null
+  let current = this.head; //Me paro en el primer nodo
+  if(!current){ //Si el primer nodo es null
+    return null; //retrono null porque no hay nodos para eliminar
   }else if(current.next == null){//Si head es el unico nodo
     this._length--
-    this.head = null
-    return current.value;
-  }else{
-    let prev = current;
-    while(current.next){ //mientras no esté parado en el último elemento
-      prev = current //Me dejo guardado el elemento en el que estaba parado antes de la ultima ejecucion (el anteultimo nodo)
-      current = current.next; //Me paro en el siguiente elemento
-    }
-    //console.log(prev)
-    //console.log(current)
-    prev.next = null //Borro lo que está en la propiedad next del anteultimo nodo (el ultimo nodo)
-    //console.log(prev)
-    this._length--
-    return current.value; //.value es porque espera que le retorne el valor y no el nodo
+    this.head = null //Asigno null al primer nodo (lista vacía)
+    return current.value; //Retorno el nodo eliminado
   }
+  let prev = current; //Defino una variable para almacenar el nodo previo a cada ejecucion del while
+  while(current.next){ //Mientras no esté parado en el último elemento
+    prev = current //Me dejo guardado el elemento en el que estaba parado antes de la ultima ejecucion (el anteultimo nodo)
+    current = current.next; //Me paro en el siguiente elemento
+  }
+  prev.next = null //Borro lo que está en la propiedad next del anteultimo nodo (el ultimo nodo)
+  this._length--
+  return current.value; //.value es porque espera que le retorne el valor y no el nodo
 }
 
-/* LinkedList.prototype.search = function(param){
-// /* if(param){ //cb evaluada en el valor del nodo
-//   return param;
-//  }
-  if(this._length == 0){
-    return null
-  }
-  let current = this.head;
-  let check = false;
-  if(current.value == param){
-    check = true
-  }
-  while(!check && current.next != null){
-    current = current.next;
-    if(current.value == param){
-      check = true;
-    }
-  }
-  if(check){
-    return current.value;
-  }else{
-    if(param){ //cb evaluada en el valor del nodo
-      return param;
-    }
-    return null;
-  }
-} */
-
 LinkedList.prototype.search = function(param){
-  if(this._length == 0){//Lista vacía
+  if(this._length == 0){ //Si la lista está vacía
     return null;
   }
-  if(typeof param === 'string'){
-    let current = this.head;
-    let find = false;
-    if(current.value === param){
-      return param;
+  if(typeof param === 'string' || typeof param === 'number'){ //Si el parametro es de tipo string o número:
+    let current = this.head; //Me paro en el primer nodo
+    let find = false; //Creo un controlador para usarlo cuando encuentre el valor pasado por parametro
+    if(current.value === param){ 
+      return current.value; //Si encuentro el parámetro en el head lo retorno
     }else{
-      while(!find && current.next !== null){
+      while(!find && current.next !== null){ //Recorro la lista hasta el final o hasta encontrar el Node.value que coincida con el parámetro
         current = current.next;
         if(current.value === param){
-          find = true
+          find = true //Si encuentro el parámetro en algún nodo esto va a dejar de ejecutar el while por lo que en current me va a quedar guardado el Nodo que contiene al parametro buscado
         }
       }
       if(find){
-        return param;
+        return current.value; //Si se encontró lo retorno
       }else{
-        return null
+        return null //Si no se encontró coincidencia retorno null
       }
     }
-  }else if(typeof param === 'function'){
+  }else if(typeof param === 'function'){ //Sino, si es de tipo function:
     let current = this.head;
     let find = false
-    if(param(current.value)){
-      return current.value
-    }else{
-      while(!find && current.next !== null){
+    if(param(current.value)){ //Si la callback evaluada en el valor de head retorna true
+      return current.value //Retorno el valor de head
+    }else{ //Sino lo busco en la lista
+      while(!find && current.next !== null){ //Misma logica del while anterior
         current = current.next;
         if(param(current.value)){
           find = true;
@@ -188,66 +155,9 @@ LinkedList.prototype.search = function(param){
       }
     }
   }else{
-    return null
-  }
-  /* let current = this.head;
-  let check = false;
-  let checkFun = false;
-  if(current.value === param){//Primer nodo es el buscado se retorna el valor de ese nodo
-    return current.value;
-  }
-  while(!check && current.next != null){//Recorrido de la lista hasta que encuentre el valor o la ejecucion de la callback de === true o no haya mas nodos en la lista
-    current = current.next
-    if(param === true){
-      checkFun = true;
-    }
-    if(current.value == param){
-      check = true;
-    }
-  }
-  if(check || checkFun){
-    return current.value;
-  }else{
-  return null;
-  } */
+    return null //Por si no se pasa ni un string ni una callback
+  } 
 }
-
-/*  let lista = new LinkedList()
-console.log(lista);
-lista.add("Gary")
-console.log(lista);
-lista.add("Barto")
-console.log(lista);
-lista.add("Mila") 
-console.log(lista);
-lista.add("Otro") 
-console.log(lista); */
-
-
-/* console.log("Metodo remove")
-console.log(lista.remove());
-console.log(lista);
-console.log(lista.remove());
-console.log(lista);
-console.log(lista.remove());
-console.log(lista);
-console.log(lista.remove());
-console.log(lista);
-console.log(lista.remove());
-console.log(lista); */
-
-/* function fun (param){
-  return true;
-}
-console.log("Metodo search")
-console.log(lista.search("Gary"));
-console.log(lista.search("Barto"));
-console.log(lista.search("Otro"))
-console.log(lista.search(fun())); */
-
-//function LinkedList() {}
-
-//function Node(value) {}
 
 /* EJERCICIO 2
 Implementar la clase HashTable.
@@ -262,7 +172,89 @@ La clase debe tener los siguientes métodos:
 
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
-function HashTable() {}
+
+function HashTable(){
+  this.buckets = new Array(35); //Define un array con 35 posiciones vacías
+  this.numBuckets = this.buckets.length;
+}
+
+
+HashTable.prototype.hash = function(string){
+  let arr = string.split("");
+  let suma = 0;
+  for(let i = 0;i < arr.length; i++){
+    let element = arr[i];
+    let valorNumerico = element.charCodeAt()
+    suma = suma + valorNumerico
+  }
+  let resultado = suma % this.numBuckets 
+  return resultado
+}
+
+HashTable.prototype.set = function(clave,valor){
+  let claveHasheada = this.hash(clave)
+  let objeto = {}
+  objeto[clave] = valor
+  if(this.buckets[claveHasheada] && this.buckets[claveHasheada].hasOwnProperty(`${clave}`)){// Si la clave ya existe, sobreescribo el valor
+    this.buckets[claveHasheada] = objeto
+  }else if(this.buckets[claveHasheada]){
+    this.buckets[claveHasheada][clave] = valor
+  }else{
+    this.buckets[claveHasheada] = objeto
+  }
+}
+
+HashTable.prototype.get = function(clave){
+  let claveHasheada = this.hash(clave);
+  let objetoBuscado = this.buckets[claveHasheada];
+  console.log(objetoBuscado);
+  if(!objetoBuscado[clave]){
+    return "No existe la clave";
+  }
+  let valorBuscado = objetoBuscado[clave];
+  return valorBuscado;
+}
+
+HashTable.prototype.hasKey = function(clave){
+  for (let i = 0; i < this.buckets.length; i++) {
+    const element = this.buckets[i];
+    if(element && element.hasOwnProperty(`${clave}`)){//El primer element es para comprobar si la posicion está ocupada, si no lo pongo lanza error
+      return true
+    }
+  }
+  return false
+}
+
+let tabla = new HashTable ();
+console.log(tabla.hash("Gary"));
+console.log(tabla.hash("Mila"));
+console.log(tabla.hash("laMi"));
+console.log(tabla.hash("liJu"));
+console.log(tabla.numBuckets);
+tabla.set("Gary","Cat");
+console.log(tabla.buckets[18]);
+console.log(tabla.get("Gary"));
+tabla.set("Gary","White Cat");
+console.log(tabla.buckets[18]);
+tabla.set("Mila","BlackCat");
+tabla.set("Juli","Juli");
+console.log(tabla.buckets[19]);
+tabla.set("liJu","valor 2");
+console.log(tabla.buckets[19]);
+tabla.set("foo","valor1");
+console.log(tabla.buckets[9]);
+tabla.set("ofo","valor2");
+console.log(tabla.buckets[9])
+console.log(tabla.buckets);
+console.log(tabla.get("Gary"));
+console.log(tabla.get("Juli"));
+console.log(tabla.get("liJu"));
+console.log(tabla.get("asdad"));
+console.log(tabla.hasKey("Gary"));
+console.log(tabla.hasKey("ryGa"));
+console.log(tabla.hasKey("Juli"));
+console.log(tabla.hasKey("liJu"));
+
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
