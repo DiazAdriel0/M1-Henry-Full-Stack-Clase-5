@@ -10,66 +10,6 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   search(isEven), donde isEven es una función que retorna true cuando recibe por parámetro un número par, busca un nodo cuyo valor sea un número par.
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
-/* class Node{
-  constructor(value){
-    this.value = value;
-    this.next = null;
-}
-
-class LinkedList{
-  constructor(){
-    this.head = null;
-    this._length = 0;
-  }
-  add(value){
-    const nodo = new Node(value);
-    let current = this.head;
-    if(!current){
-      this.head = nodo //Si current es null, head va a ser este nodo que estoy agregando
-    }else{
-      while(current.next){ //mientras current.next tenga algo
-        current = current.next; //pararme en el siguiente nodo
-      } //Cuando se encuentra con el ultimo
-      current.next = nodo; //le agrega el nuevo
-    }
-    this._length++
-    return nodo;
-  }
-  remove(){
-    let current = this.head;
-    if(!current){
-      return current;
-    }
-    else{
-      let prev = current;
-      while(current.next){
-        prev = current
-        current = current.next;
-      }
-      console.log(prev)
-      console.log(current)
-      prev.next = null
-      this._length--
-      return current;
-    }
-  }
-  search(valor){
-    let current = this.head;
-    let check = false;
-    if(current.value == valor){
-      check = true
-    }
-    while(!check && current.value != valor){
-      current = current.next;
-      if(current.value == valor){
-        check = true;
-      }
-    }
-  /*if(check){
-    return current;
-    } 
-  }
-}  */
 
 function Node(value){
   this.value = value;
@@ -192,22 +132,21 @@ HashTable.prototype.hash = function(string){
 }
 
 HashTable.prototype.set = function(clave,valor){
-  let claveHasheada = this.hash(clave)
+  let index = this.hash(clave)
   let objeto = {}
   objeto[clave] = valor
-  if(this.buckets[claveHasheada] && this.buckets[claveHasheada].hasOwnProperty(`${clave}`)){// Si la clave ya existe, sobreescribo el valor
-    this.buckets[claveHasheada] = objeto
-  }else if(this.buckets[claveHasheada]){
-    this.buckets[claveHasheada][clave] = valor
+  if(this.buckets[index] && this.buckets[index].hasOwnProperty(`${clave}`)){// Si la clave ya existe, sobreescribo el valor
+    this.buckets[index] = objeto
+  }else if(this.buckets[index]){
+    this.buckets[index][clave] = valor
   }else{
-    this.buckets[claveHasheada] = objeto
+    this.buckets[index] = objeto
   }
 }
 
 HashTable.prototype.get = function(clave){
-  let claveHasheada = this.hash(clave);
-  let objetoBuscado = this.buckets[claveHasheada];
-  console.log(objetoBuscado);
+  let index = this.hash(clave);
+  let objetoBuscado = this.buckets[index];
   if(!objetoBuscado[clave]){
     return "No existe la clave";
   }
@@ -218,7 +157,7 @@ HashTable.prototype.get = function(clave){
 HashTable.prototype.hasKey = function(clave){
   for (let i = 0; i < this.buckets.length; i++) {
     const element = this.buckets[i];
-    if(element && element.hasOwnProperty(`${clave}`)){//El primer element es para comprobar si la posicion está ocupada, si no lo pongo lanza error
+    if(element && element.hasOwnProperty(clave)){//El primer element es para comprobar si la posicion está ocupada, si no lo pongo lanza error
       return true
     }
   }
